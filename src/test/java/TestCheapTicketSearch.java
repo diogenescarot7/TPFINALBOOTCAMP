@@ -9,6 +9,8 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class TestCheapTicketSearch {
@@ -25,17 +27,22 @@ public class TestCheapTicketSearch {
     }
 
     @Test
-    public void TestPedidosya() {
+    public void TestCheapTicket() {
         homepage = new CheapTicketHomePage(driver);
         driver.navigate().to(appURL);
         driver.findElement(By.id("tab-hotel-tab-hp")).click();
         homepage.setLocationElement("Miami Beach");
-        driver.findElement(By.id("hotel-checkin-hp-hotel")).click();
-        //driver.findElement(By.cssSelector(".datepicker-call .datepicker-cal-month .datepicker-cal-week .datepicker-cal-dates .datepicker-day-number #20 #5 #2019")).click();
-        //homepage.datePickerCheckin(20);
-        homepage.setCheckinElement("06/19/2019");
+        //homepage.clickCheckinbtn();
+        driver.findElement(By.id("hotel-checkin-hp-hotel")).sendKeys("06/12/2019");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        ((JavascriptExecutor) driver).executeScript("document.getElementById('hotel-checkout-hp-hotel').value = '06/28/2019';");
+        homepage.clickdateCheckin();
+        //driver.findElement(By.id("hotel-checkin-hp-hotel")).click();
+
+        //homepage.setCheckinElement("06/19/2019");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.findElement(By.id("hotel-checkout-hp-hotel")).click();
+        homepage.clickDateCheckOut();
+        //((JavascriptExecutor) driver).executeScript("document.getElementById('hotel-checkout-hp-hotel').value = '06/28/2019';");
         homepage.setNumAdultsElement("4");
         homepage.setNumChildrenElement("1");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -43,30 +50,31 @@ public class TestCheapTicketSearch {
         homepage.setAgeChildrenElement("7");
         homepage.clickSearchButton();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        searchpage=new CheapTicketSearchPage(driver);
-        String titleResultSearch=searchpage.getTitleResultSearchElement().getText();
+        searchpage = new CheapTicketSearchPage(driver);
+        String titleResultSearch = searchpage.getTitleResultSearchElement().getText();
         String[] titleSplit = titleResultSearch.split(" ");
         String qaSearch = titleSplit[2];
         int qaFound = Integer.parseInt(qaSearch);
         String location = titleSplit[0] + " " + titleSplit[1];
         Assert.assertTrue(qaFound > 0);
-        takeScreen(driver,"ResultadoDeBusquedaHotel.jpg");
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy--HH.mm.ss");
+        String dateNow = formatter.format(date);
+        takeScreen(driver, dateNow + "ResultadoDeBusquedaHotel.jpg");
 
         Assert.assertEquals("Miami Beach:", location);
-        String city=searchpage.getCityElement().getText();
+        String city = searchpage.getCityElement().getText();
         searchpage.setNameHotelElement("Fae");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
         searchpage.clickFirstSearch();
         searchpage.clickFilterHotel();
 
-        String nameHotel=searchpage.getNameHotelResultElement().getText();
+        String nameHotel = searchpage.getNameHotelResultElement().getText();
 
 
         Assert.assertEquals("Faena Hotel Miami Beach", nameHotel);
-        takeScreen(driver,"HotelFaena.jpg");
-
-
+        takeScreen(driver, dateNow + "HotelFaena.jpg");
 
 
     }
@@ -79,13 +87,10 @@ public class TestCheapTicketSearch {
     }
 
     public void takeScreen(WebDriver driver, String name) {
-        File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        try
-        {
-            FileUtils.copyFile(src,new File("imagen\\"+name));
-        }
-        catch (IOException e)
-        {
+        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(src, new File("imagen\\" + name));
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 

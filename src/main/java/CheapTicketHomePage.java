@@ -14,10 +14,11 @@ public class CheapTicketHomePage {
 
     @FindBy(how = How.ID, using = "hotel-destination-hp-hotel")
     private WebElement locationElement;
-    @FindBy(how = How.ID, using = "hotel-checkin-hp-hotel")
+    //@FindBy(how = How.ID, using = "hotel-checkin-hp-hotel")
+    @FindBy(how = How.CSS, using = ".datepicker-cal-date[data-day='12'][data-month='5']")
     private WebElement checkinElement;
     //@FindBy(how=How.ID,using="hotel-checkout-hp-hotel")
-    @FindBy(how = How.ID, using = "package-returning-hp-package")
+    @FindBy(how = How.CSS, using = ".datepicker-cal-date[data-day='28'][data-month='5']")
     private WebElement checkoutElement;
     @FindBy(how = How.ID, using = "hotel-1-adults-hp-hotel")
     private WebElement numAdultsElement;
@@ -29,6 +30,21 @@ public class CheapTicketHomePage {
     private WebElement searchButton;
     @FindBy(how = How.CLASS_NAME, using = "datepicker-cal-dates")
     private List<WebElement> calender;
+    @FindBy(how = How.ID, using = "hotel-checkin-hp-hotel")
+    private WebElement checkinbtn;
+
+
+    public void clickCheckinbtn() {
+        checkinbtn.click();
+    }
+
+    public void clickdateCheckin() {
+        checkinElement.click();
+    }
+
+    public void clickDateCheckOut() {
+        checkoutElement.click();
+    }
 
 
     public void clickSearchButton() {
