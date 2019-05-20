@@ -30,17 +30,20 @@ public class TestCheapTicketSearch {
     public void TestCheapTicket() {
         homepage = new CheapTicketHomePage(driver);
         driver.navigate().to(appURL);
-        driver.findElement(By.id("tab-hotel-tab-hp")).click();
+        homepage.clickHotelbtn();
+        //driver.findElement(By.id("tab-hotel-tab-hp")).click();
         homepage.setLocationElement("Miami Beach");
         //homepage.clickCheckinbtn();
-        driver.findElement(By.id("hotel-checkin-hp-hotel")).sendKeys("06/12/2019");
+        homepage.setCheckinFirst("06/12/2019");
+        //driver.findElement(By.id("hotel-checkin-hp-hotel")).sendKeys("06/12/2019");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         homepage.clickdateCheckin();
         //driver.findElement(By.id("hotel-checkin-hp-hotel")).click();
 
         //homepage.setCheckinElement("06/19/2019");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.findElement(By.id("hotel-checkout-hp-hotel")).click();
+        homepage.clickCheckOutbtn();
+        //driver.findElement(By.id("hotel-checkout-hp-hotel")).click();
         homepage.clickDateCheckOut();
         //((JavascriptExecutor) driver).executeScript("document.getElementById('hotel-checkout-hp-hotel').value = '06/28/2019';");
         homepage.setNumAdultsElement("4");
@@ -56,11 +59,9 @@ public class TestCheapTicketSearch {
         String qaSearch = titleSplit[2];
         int qaFound = Integer.parseInt(qaSearch);
         String location = titleSplit[0] + " " + titleSplit[1];
+
+        takeScreen(driver, "ResultadoDeBusquedaHotel.jpg");
         Assert.assertTrue(qaFound > 0);
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy--HH.mm.ss");
-        String dateNow = formatter.format(date);
-        takeScreen(driver, dateNow + "ResultadoDeBusquedaHotel.jpg");
 
         Assert.assertEquals("Miami Beach:", location);
         String city = searchpage.getCityElement().getText();
@@ -72,9 +73,9 @@ public class TestCheapTicketSearch {
 
         String nameHotel = searchpage.getNameHotelResultElement().getText();
 
-
+        takeScreen(driver, "HotelFaena.jpg");
         Assert.assertEquals("Faena Hotel Miami Beach", nameHotel);
-        takeScreen(driver, dateNow + "HotelFaena.jpg");
+
 
 
     }
@@ -88,8 +89,11 @@ public class TestCheapTicketSearch {
 
     public void takeScreen(WebDriver driver, String name) {
         File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy--HH.mm.ss");
+        String dateNow = formatter.format(date);
         try {
-            FileUtils.copyFile(src, new File("imagen\\" + name));
+            FileUtils.copyFile(src, new File("imagen\\" +dateNow+name));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

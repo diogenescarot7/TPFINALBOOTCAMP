@@ -32,7 +32,26 @@ public class CheapTicketHomePage {
     private List<WebElement> calender;
     @FindBy(how = How.ID, using = "hotel-checkin-hp-hotel")
     private WebElement checkinbtn;
+    @FindBy(how = How.ID, using = "tab-hotel-tab-hp")
+    private WebElement hotelbtn;
+    @FindBy(how = How.ID, using = "hotel-checkout-hp-hotel")
+    private WebElement checkOutbtn;
+    @FindBy(how=How.ID,using = "hotel-checkin-hp-hotel")
+            private WebElement checkinFirstElement;
 
+
+
+    public void setCheckinFirst(String cidate)
+    {
+        checkinFirstElement.sendKeys(cidate);
+    }
+    public void clickCheckOutbtn() {
+        checkOutbtn.click();
+    }
+
+    public void clickHotelbtn() {
+        hotelbtn.click();
+    }
 
     public void clickCheckinbtn() {
         checkinbtn.click();
